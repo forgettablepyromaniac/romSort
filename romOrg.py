@@ -4,13 +4,28 @@ import re
 import argparse
 
 region_patterns = {
-    'USA': [r'(U|USA)'],
-    'Japan': [r'(J|Japan)'],
-    'Europe': [r'(E|Europe)'],
-    'Korea': [r'(K|Korea)'],
-    'Unknown': [r'(Unknown)'],
-    'Other': []  # This will be the default category for unmatched ROMs
+    'Prototype': [r'\bProto\b', r'\bPrototype\b'],
+    'Hack': [r'\bHack\b', r'\bH\b'],
+    'World': [r'\bWorld\b'],
+    'USA': [r'\bU\b', r'\bUSA\b'],
+    'Japan': [r'\bJ\b', r'\bJapan\b'],
+    'Europe': [r'\bE\b', r'\bEurope\b'],
+    'Korea': [r'\bK\b', r'\bKorea\b'],
+    'Unknown': [r'\bUnknown\b'],
+    'Other': []  # Default for unmatched ROMs
 }
+
+# Define the region priority order
+region_priority = [
+    'Prototype',  # Highest priority
+    'Hack',
+    'World',
+    'USA',
+    'Japan',
+    'Europe',
+    'Korea',
+    'Unknown'
+]
 
 # parse command-line arguments.
 def parse_arguments():
@@ -22,23 +37,30 @@ def parse_arguments():
 
 # region-finding time
 def get_region(filename):
-    # find all parentheses
     matches = re.findall(r'\((.*?)\)', filename)
-
-    # if no parentheses, go to the shadow realm.
     if not matches:
         return 'Other'
+
+    # Collect all matched regions in a list
+    matched_regions = []
 
     for match in matches:
         match = match.strip()
 
         for region, patterns in region_patterns.items():
             for pattern in patterns:
-                # check if pattern matches the region name, case-insensitive
-                if re.search(pattern, match, re.IGNORECASE):
-                    return region
+                if re.fullmatch(pattern, match, re.IGNORECASE):
+                    matched_regions.append(region)
 
-    # if no region is found:
+    # If no region found, return 'Other'
+    if not matched_regions:
+        return 'Other'
+
+    # Return the first region from the priority list that matches
+    for priority_region in region_priority:
+        if priority_region in matched_regions:
+            return priority_region
+
     return 'Other'
 
 # handle special characters and numbers (mostly numbers)
