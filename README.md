@@ -6,13 +6,10 @@ I would have tried to do it myself, but I still don't quite understand python my
 
 Of course, this is slightly tailored to the way I wanted it, but still.
 
-  - Region-Based Sorting for Numbers and Special Characters
-  ROMs starting with numbers or special characters are now placed into folders labeled "1" (numbers) and "2" (special characters), nested under their respective region folders.
-  
-  - Dynamic Folder Creation
-  The script dynamically organizes ROMs into a clear and hierarchical structure based on region and filename characteristics, improving organization and clarity.
+  - Organize ROMs into a hierarchical structure based on region and filename characteristics.
+  - ROMs starting with numbers or special characters are placed into folders labeled "1" (numbers) and "2" (special characters), nested under their respective region folders.
+
 ---
-**Enhanced with ChatGPT**
 
 # Requirements
 A set (or multiple sets) of roms.
